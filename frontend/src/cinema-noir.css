@@ -1,0 +1,89 @@
+/* Cinema Noir Color Scheme */
+:root {
+  --charcoal: #1A1A1B;
+  --electric-silver: #E2E2E2;
+  --deep-slate: #2D2E32;
+  --muted-gold: #C5A059;
+  --cobalt: #2F58CD;
+}
+
+/* Base overrides */
+body {
+  background-color: var(--charcoal) !important;
+  color: var(--electric-silver) !important;
+}
+
+/* Navigation */
+nav {
+  background-color: rgba(26, 26, 27, 0.95) !important;
+  border-color: var(--deep-slate) !important;
+}
+
+.nav-link {
+  color: var(--electric-silver) !important;
+}
+
+.nav-link:hover {
+  color: var(--muted-gold) !important;
+}
+
+/* Sections */
+.bg-white {
+  background-color: var(--charcoal) !important;
+}
+
+.bg-gray-100 {
+  background-color: var(--deep-slate) !important;
+}
+
+.bg-gray-50 {
+  background-color: var(--deep-slate) !important;
+}
+
+/* Text colors */
+.text-gray-900 {
+  color: var(--electric-silver) !important;
+}
+
+.text-gray-700 {
+  color: var(--electric-silver) !important;
+}
+
+.text-gray-600 {
+  color: #B8B8B8 !important;
+}
+
+/* Buttons and accents */
+.bg-gradient-to-r {
+  background: linear-gradient(to right, var(--muted-gold), var(--cobalt)) !important;
+}
+
+/* Cards */
+.bg-gray-50 {
+  background-color: var(--deep-slate) !important;
+}
+
+/* Borders */
+.border-gray-200 {
+  border-color: var(--deep-slate) !important;
+}
+
+.border-gray-300 {
+  border-color: var(--deep-slate) !important;
+}
+
+/* Mobile menu */
+#mobile-menu {
+  background-color: rgba(26, 26, 27, 0.95) !important;
+}
+
+/* Logo gradient */
+.bg-clip-text {
+  background: linear-gradient(to right, var(--muted-gold), var(--cobalt)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
