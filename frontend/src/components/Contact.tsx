@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import SEO from './SEO'
 import Navigation from './Navigation'
 import { Footer } from './AboutSection'
@@ -6,8 +7,9 @@ import { HiPhone, HiMail, HiLocationMarker } from 'react-icons/hi'
 import { FaFacebookF, FaTiktok, FaTelegram } from 'react-icons/fa'
 
 const Contact: React.FC = () => {
+  const { lang } = useParams<{ lang: string }>()
   const [currentLang, setCurrentLang] = useState(() => {
-    return localStorage.getItem('language') || 'en'
+    return lang || 'en'
   })
   const [formData, setFormData] = useState({
     name: '',
@@ -81,15 +83,10 @@ const Contact: React.FC = () => {
   }
 
   useEffect(() => {
-    const checkLang = setInterval(() => {
-      const newLang = localStorage.getItem('language') || 'en'
-      if (newLang !== currentLang) {
-        setCurrentLang(newLang)
-      }
-    }, 100)
-
-    return () => clearInterval(checkLang)
-  }, [currentLang])
+    const urlLang = lang || 'en'
+    setCurrentLang(urlLang)
+    localStorage.setItem('language', urlLang)
+  }, [lang])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({

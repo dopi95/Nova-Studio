@@ -1,31 +1,36 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { t, updateContent } from '../i18n'
 
 const Navigation: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const { lang } = useParams<{ lang: string }>()
   const [isLangOpen, setIsLangOpen] = useState(false)
   const [currentLang, setCurrentLang] = useState(() => {
-    return localStorage.getItem('language') || 'en'
+    return lang || 'en'
   })
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [translations, setTranslations] = useState({
-    brandName: 'ኖቫ ስቱዲዮ',
+    brandName: 'NOVA STUDIO',
     nav: {
-      home: 'መነሻ',
-      about: 'ስለ እኛ', 
-      services: 'አገልግሎቶች',
-      portfolio: 'የእኛ ስራ',
-      contact: 'ያግኙን'
+      home: 'Home',
+      about: 'About', 
+      services: 'Services',
+      portfolio: 'Our Work',
+      contact: 'Contact'
     }
   })
 
-  const toggleLanguage = (lang: string) => {
-    setCurrentLang(lang)
+  const toggleLanguage = (newLang: string) => {
+    setCurrentLang(newLang)
     setIsLangOpen(false)
-    localStorage.setItem('language', lang)
-    updateTranslations(lang)
+    localStorage.setItem('language', newLang)
+    updateTranslations(newLang)
+    
+    // Update URL with new language
+    const currentPath = location.pathname.replace(/^\/(en|am)/, '')
+    navigate(`/${newLang}${currentPath}`)
   }
 
   const updateTranslations = (lang: string) => {
@@ -55,8 +60,9 @@ const Navigation: React.FC = () => {
   }
 
   const handleSectionNavigation = (sectionId: string) => {
-    if (location.pathname !== '/') {
-      navigate('/')
+    const targetPath = `/${currentLang}`
+    if (location.pathname !== targetPath) {
+      navigate(targetPath)
       setTimeout(() => {
         const element = document.getElementById(sectionId)
         if (element) {
@@ -73,9 +79,11 @@ const Navigation: React.FC = () => {
   }
 
   useEffect(() => {
-    const savedLang = localStorage.getItem('language') || 'en'
-    updateTranslations(savedLang)
-  }, [])
+    const urlLang = lang || 'en'
+    setCurrentLang(urlLang)
+    localStorage.setItem('language', urlLang)
+    updateTranslations(urlLang)
+  }, [lang])
 
   return (
     <>
@@ -84,16 +92,16 @@ const Navigation: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <img src="/img/logo.jpg" alt="Nova Studio" className="h-10 w-10 mr-3 rounded-full border-2 shadow-md object-cover" style={{ borderColor: '#C5A059' }} />
-              <a href="/" className="text-2xl font-bold hover:opacity-80 transition-opacity" style={{ background: 'linear-gradient(to right, #C5A059, #2F58CD)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              <a href={`/${currentLang}`} className="text-2xl font-bold hover:opacity-80 transition-opacity" style={{ background: 'linear-gradient(to right, #C5A059, #2F58CD)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 {translations.brandName}
               </a>
             </div>
             <div className="hidden md:flex space-x-8">
-              <a href="/" className="nav-link hover:text-purple-400 transition-colors">{translations.nav.home}</a>
+              <a href={`/${currentLang}`} className="nav-link hover:text-purple-400 transition-colors">{translations.nav.home}</a>
               <button onClick={() => handleSectionNavigation('about')} className="nav-link hover:text-purple-400 transition-colors bg-transparent border-none cursor-pointer">{translations.nav.about}</button>
               <button onClick={() => handleSectionNavigation('services')} className="nav-link hover:text-purple-400 transition-colors bg-transparent border-none cursor-pointer">{translations.nav.services}</button>
               <button onClick={() => handleSectionNavigation('portfolio')} className="nav-link hover:text-purple-400 transition-colors bg-transparent border-none cursor-pointer">{translations.nav.portfolio}</button>
-              <a href="/contact" className="nav-link hover:text-purple-400 transition-colors">{translations.nav.contact}</a>
+              <a href={`/${currentLang}/contact`} className="nav-link hover:text-purple-400 transition-colors">{translations.nav.contact}</a>
             </div>
             <div className="flex items-center space-x-4">
               {/* Language Toggle - Desktop Only */}
@@ -152,11 +160,11 @@ const Navigation: React.FC = () => {
       {/* Mobile Menu */}
       <div className={`fixed inset-0 z-40 transition-all duration-300 ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`} style={{ backgroundColor: 'rgba(26, 26, 27, 0.98)', backdropFilter: 'blur(10px)' }}>
         <div className="flex flex-col items-center justify-center h-full space-y-8">
-          <a href="/" onClick={() => setIsMobileMenuOpen(false)} className={`text-2xl font-semibold transition-all duration-500 hover:scale-105 ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`} style={{ color: '#E2E2E2', transitionDelay: '100ms' }} onMouseEnter={(e) => e.currentTarget.style.color = '#C5A059'} onMouseLeave={(e) => e.currentTarget.style.color = '#E2E2E2'}>{translations.nav.home}</a>
+          <a href={`/${currentLang}`} onClick={() => setIsMobileMenuOpen(false)} className={`text-2xl font-semibold transition-all duration-500 hover:scale-105 ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`} style={{ color: '#E2E2E2', transitionDelay: '100ms' }} onMouseEnter={(e) => e.currentTarget.style.color = '#C5A059'} onMouseLeave={(e) => e.currentTarget.style.color = '#E2E2E2'}>{translations.nav.home}</a>
           <button onClick={() => handleSectionNavigation('about')} className={`text-2xl font-semibold transition-all duration-500 hover:scale-105 bg-transparent border-none cursor-pointer ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`} style={{ color: '#E2E2E2', transitionDelay: '200ms' }} onMouseEnter={(e) => e.currentTarget.style.color = '#C5A059'} onMouseLeave={(e) => e.currentTarget.style.color = '#E2E2E2'}>{translations.nav.about}</button>
           <button onClick={() => handleSectionNavigation('services')} className={`text-2xl font-semibold transition-all duration-500 hover:scale-105 bg-transparent border-none cursor-pointer ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`} style={{ color: '#E2E2E2', transitionDelay: '300ms' }} onMouseEnter={(e) => e.currentTarget.style.color = '#C5A059'} onMouseLeave={(e) => e.currentTarget.style.color = '#E2E2E2'}>{translations.nav.services}</button>
           <button onClick={() => handleSectionNavigation('portfolio')} className={`text-2xl font-semibold transition-all duration-500 hover:scale-105 bg-transparent border-none cursor-pointer ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`} style={{ color: '#E2E2E2', transitionDelay: '400ms' }} onMouseEnter={(e) => e.currentTarget.style.color = '#C5A059'} onMouseLeave={(e) => e.currentTarget.style.color = '#E2E2E2'}>{translations.nav.portfolio}</button>
-          <a href="/contact" onClick={() => setIsMobileMenuOpen(false)} className={`text-2xl font-semibold transition-all duration-500 hover:scale-105 ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`} style={{ color: '#E2E2E2', transitionDelay: '500ms' }} onMouseEnter={(e) => e.currentTarget.style.color = '#C5A059'} onMouseLeave={(e) => e.currentTarget.style.color = '#E2E2E2'}>{translations.nav.contact}</a>
+          <a href={`/${currentLang}/contact`} onClick={() => setIsMobileMenuOpen(false)} className={`text-2xl font-semibold transition-all duration-500 hover:scale-105 ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`} style={{ color: '#E2E2E2', transitionDelay: '500ms' }} onMouseEnter={(e) => e.currentTarget.style.color = '#C5A059'} onMouseLeave={(e) => e.currentTarget.style.color = '#E2E2E2'}>{translations.nav.contact}</a>
           
           {/* Language Toggle in Mobile Menu */}
           <div className={`mt-8 pt-8 border-t transition-all duration-500 ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`} style={{ borderColor: '#2D2E32', transitionDelay: '600ms' }}>

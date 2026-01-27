@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import SEO from './SEO'
 import Navigation from './Navigation'
 import Hero from './Hero'
@@ -9,11 +10,12 @@ import { HiPhone, HiMail, HiInformationCircle } from 'react-icons/hi'
 import { FaTelegram } from 'react-icons/fa'
 
 const Home: React.FC = () => {
+  const { lang } = useParams<{ lang: string }>()
   const [isContactOpen, setIsContactOpen] = useState(false)
   const [showContactBox, setShowContactBox] = useState(false)
   const [currentIconIndex, setCurrentIconIndex] = useState(0)
   const [currentLang, setCurrentLang] = useState(() => {
-    return localStorage.getItem('language') || 'en'
+    return lang || 'en'
   })
 
   const seoData = {
@@ -38,12 +40,9 @@ const Home: React.FC = () => {
   ]
 
   useEffect(() => {
-    const checkLang = setInterval(() => {
-      const newLang = localStorage.getItem('language') || 'en'
-      if (newLang !== currentLang) {
-        setCurrentLang(newLang)
-      }
-    }, 100)
+    const urlLang = lang || 'en'
+    setCurrentLang(urlLang)
+    localStorage.setItem('language', urlLang)
 
     const handleScroll = () => {
       const aboutSection = document.getElementById('about')
@@ -61,11 +60,10 @@ const Home: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll)
     return () => {
-      clearInterval(checkLang)
       window.removeEventListener('scroll', handleScroll)
       clearInterval(iconInterval)
     }
-  }, [currentLang])
+  }, [lang])
 
   return (
     <>
