@@ -108,11 +108,11 @@ const Contact: React.FC = () => {
       formDataToSend.append('email', formData.email)
       formDataToSend.append('subject', formData.subject)
       formDataToSend.append('message', formData.message)
-      formDataToSend.append('_to', 'elyasyenealem@gmail.com')
+      formDataToSend.append('_to', 'novastudioet17@gmail.com')
       formDataToSend.append('_subject', `Nova Studio Contact: ${formData.subject}`)
       formDataToSend.append('_captcha', 'false')
       
-      const response = await fetch('https://formsubmit.co/elyasyenealem@gmail.com', {
+      const response = await fetch('https://formsubmit.co/novastudioet17@gmail.com', {
         method: 'POST',
         body: formDataToSend
       })
