@@ -529,7 +529,7 @@ export const Footer: React.FC = () => {
               {content[currentLang].copyright}
             </p>
             <p className="text-gray-600 text-xs">
-              {currentLang === 'en' ? 'Developed by' : 'የተሰራው በ'} <a href="https://t.me/ChainTech_6/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">Chain Tech</a>
+              {currentLang === 'en' ? 'Developed by' : 'የተሰራው በ'} <a href="https://awratech.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">Awra Tech</a>
             </p>
           </div>
         </div>
